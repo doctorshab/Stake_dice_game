@@ -17,10 +17,13 @@ class _ChooseLocationState extends State<ChooseLocation> {
 
   void dice(){
     int wager = int.tryParse(wagerinput.text) ?? 0;
-    if( (wager * winmultipler) >coins){
-      Fluttertoast.showToast(msg: "wager too high");
+    if(winmultipler==0){
+      Fluttertoast.showToast(msg: "Please chose the type of wager");wagerinput.clear();return;
     }
-    else if( wager<=0 ){ Fluttertoast.showToast(msg: "please input a valid wager");}
+    if( (wager * winmultipler) >coins){
+      Fluttertoast.showToast(msg: "wager too high");return;
+    }
+    else if( wager<=0 ){ Fluttertoast.showToast(msg: "please input a valid wager");return;}
     else {
       Random random =Random();
       List<int> nums = List.generate(4, (index) => random.nextInt(6) + 1);
@@ -43,7 +46,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
         });
         Fluttertoast.showToast(msg: "numbers : $numbers YOU LOSE ${winmultipler * wager} coins",
             gravity: ToastGravity.BOTTOM);
-        if(coins==0){
+        if(coins==0 || coins==1){
           Future.delayed(Duration(seconds: 3),(){
             Fluttertoast.showToast(msg: "YOU LOST THE GAME PLAESE RESTART");
           });
@@ -51,7 +54,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
       }
     }
     setState(() {
-      wagerinput.clear();
+      wagerinput.clear();winmultipler=0;
     });
   }
 
@@ -66,66 +69,69 @@ class _ChooseLocationState extends State<ChooseLocation> {
       appBar: AppBar(
         title: Row(
           children: <Widget>[
-            SizedBox(width: 80.0,),
+            const SizedBox(width: 80.0,),
             Text('coins : $coins'),
-            SizedBox(width: 100.0,),
+           const SizedBox(width: 100.0,),
             IconButton(onPressed: (){
               setState(() {
                 coins=10;
               });
-            }, icon: Icon(Icons.restart_alt),),
+            }, icon: const Icon(Icons.restart_alt),),
           ],
         ),
         leading: IconButton(onPressed: (){
           Navigator.pop(context);
-        }, icon: Icon(Icons.exit_to_app)),
+        }, icon: const Icon(Icons.exit_to_app)),
         backgroundColor: Colors.blue,
         centerTitle: true,
         elevation: 0,
       ),
       body: Column(
         children: <Widget>[
-          SizedBox(height: 5.0,),
+         const SizedBox(height: 5.0,),
         TextField(
          keyboardType: TextInputType.number,
           controller: wagerinput,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'ENTER A NUMBER',
             border: OutlineInputBorder(),
           ),
         ),
-          SizedBox(height: 20.0,),
+          const SizedBox(height: 20.0,),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               ElevatedButton(onPressed: () {
                 setState(() {
                   winmultipler=2;
                 });
-              }, child: Text('  2 alike  '),
+              },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[200]),
+                child: const Text('  2 alike  '),
               ),
               ElevatedButton(onPressed: () {
                 setState(() {
                   winmultipler=3;
                 });
-              }, child: Text('  3 alike  '),
+              },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[200]),
+                child: const Text('  3 alike  '),
               ),
               ElevatedButton(onPressed: () {
                 setState(() {
                   winmultipler=4;
                 });
-              }, child: Text('  4 alike  '),
+              },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[200]),
+                child: const Text('  4 alike  '),
               )
             ],
           ),
-          SizedBox(height:40.0,),
-          ElevatedButton(onPressed: dice, child: Text('START'),
+          const SizedBox(height:40.0,),
+          ElevatedButton(onPressed: dice,
           style:ElevatedButton.styleFrom(
             padding: EdgeInsets.all(20.0),
             textStyle: TextStyle(fontSize: 30)
-          ) ,
+          ) , child: const Text('START'),
           )
         ],
       ),
