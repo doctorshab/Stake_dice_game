@@ -13,9 +13,10 @@ class ChooseLocation extends StatefulWidget {
 class _ChooseLocationState extends State<ChooseLocation> {
   int coins =10, buttonindex=-1, wager=0, winmultipler=0;
   Random random =Random();List<int>nums=[1,1,1,1];
-  List<String>history=[];
+  List<String>history=[""];String numbers='';
 
   final wagerinput= TextEditingController();
+
   void youLost( BuildContext context ){           // dialog that pops when u lose
     showDialog(context: context, builder: (BuildContext context){
     return AlertDialog(
@@ -87,7 +88,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
 
       nums = List.generate(4, (index) => random.nextInt(6) + 1);
       Map<int,int> count ={};
-      String numbers = nums.join(" ,");
+
       for(int num in nums){
         count[num]=(count[num] ?? 0) +1;
       } int maxCount=count.values.reduce((a,b) => a>b ? a : b);
@@ -98,7 +99,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
         });
         Fluttertoast.showToast(msg: "numbers : $numbers YOU WIN ${winmultipler * wager} coins",
         gravity: ToastGravity.BOTTOM);
-        history.add("numbers : $numbers YOU WIN ${winmultipler * wager} coins\ncoins:$coins");
+        history.add("numbers : $numbers YOU WIN ${winmultipler * wager} coins \ncoins:$coins");
       }
       else{
         setState(() {
@@ -187,6 +188,17 @@ class _ChooseLocationState extends State<ChooseLocation> {
                 child: const Text('  4 alike  '),
               )
             ],
+          ),
+          const SizedBox(height:40.0,),
+          Row( mainAxisAlignment: MainAxisAlignment.center,
+            children: nums.map((item){
+              return Text(item.toString(),
+              style: TextStyle(
+                fontSize: 40.0,
+                letterSpacing: 10.0
+              ),
+              );
+            }).toList(),
           ),
           const SizedBox(height:40.0,),
           ElevatedButton(onPressed: dice,
